@@ -28,6 +28,22 @@ body {
   padding: 0 20px;
 }
 
+.social-links {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.social-links a {
+  color: #333;
+  font-size: 24px;
+  margin-right: 80px;
+  transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+  color: #007bff;
+}
+
 header {
   padding: 2rem 0;
 }
@@ -211,5 +227,71 @@ footer {
 
   nav a {
     font-size: 1rem;
+  }
+}
+
+.github-section {
+  background-color: #c0c0c0; /* Leicht dunklerer Hintergrund */
+  padding: 4rem 0;
+  border-radius:2cm
+  
+}
+
+.github-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.github-profile {
+  flex: 0 0 200px;
+  margin-right: 2rem;
+}
+
+.github-avatar {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 10px 6px rgba(0, 0, 0, 0.1);
+}
+
+.github-stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  flex: 1;
+}
+
+.github-stat {
+  text-align: center;
+  margin: 1rem;
+  padding: 1rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-width: 120px;
+}
+
+.github-stat-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+.github-stat-label {
+  font-size: 1rem;
+  color: var(--secondary-color);
+}
+
+@media (max-width: 768px) {
+  .github-content {
+      flex-direction: column;
+  }
+  
+  .github-profile {
+      margin-right: 0;
+      margin-bottom: 2rem;
   }
 }
