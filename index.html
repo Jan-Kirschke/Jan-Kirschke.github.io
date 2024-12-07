@@ -1,142 +1,154 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- not needed for GitHub Pages -->
-<!-- <base href="https://jankirschke.de/"> -->
     <title>jankirschke</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        #text-canvas {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #333;
+            font-size: 1.2em;
+        }
+
+        .social-links {
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            margin: 0 10px;
+            font-size: 1.5em;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <div class="container">
-                <h1>Jan Kirschke Hallo</h1>
-                <p class="subtitle">Data and Information Science Student at TH Köln</p>
-                <nav>
-                    <a href="#home">Home</a>
-                    <a href="#projects">Projects</a>
-                    <a href="#skills">Skills</a>
-                    <a href="#skills">About</a>
-                    <a href="#skills">Blog</a>
-                    <a href="#contact">Contact</a>
-                </nav>
-                <div class="social-links">
-                    <a href="https://github.com/Jan-Kirschke" target="_blank"><i class="fab fa-github"></i></a>
-                    <a href="https://www.linkedin.com/in/Jan-Kirschke" target="_blank"><i class="fab fa-linkedin"></i></a>
-                    <a href="https://www.instagram.com/JanKirschke_Official" target="_blank"><i class="fab fa-instagram"></i></a>
-                    <a href="mailto:mail@jankirschke.de"><i class="fas fa-envelope"></i></a>
-                </div>
-            </div>
-        </header>
-
-        <main>
-            <section id="home">
-                <div class="intro">
-                    <p>Welcome to my digital realm! I'm a Data and Information Science student at TH Köln, exploring the vast landscape of technology and creativity.</p>
-                </div>
-            </section>
-
-            <section id="projects">
-                <div class="container">
-                    <h2>Projects</h2>
-                    <div class="project-grid">
-                        <div class="project-card">
-                            <h3>{Text}</h3>
-                            <p>{Text}</p>
-                        </div>
-                        <div class="project-card">
-                            <h3>{Text}</h3>
-                            <p>{Text}</p>
-                        </div>
-                        <div class="project-card">
-                            <h3>{Text}</h3>
-                            <p>{Text}</p>
-                        </div>
-                        <div class="project-card">
-                            <h3>{Text}</h3>
-                            <p>{Text}</p>
-                        </div>
-                        <div class="project-card">
-                            <h3>{Text}</h3>
-                            <p>{Text}</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="skills">
-                <div class="container">
-                    <h2>Skills</h2>
-                    <div class="skill-grid">
-                        <div class="skill-item">
-                            <h3>Python</h3>
-                            <div class="skill-bar" data-skill="80"></div>
-                        </div>
-                        <div class="skill-item">
-                            <h3>Pandas</h3>
-                            <div class="skill-bar" data-skill="70"></div>
-                        </div>
-                        <div class="skill-item">
-                            <h3>NumPy</h3>
-                            <div class="skill-bar" data-skill="60"></div>
-                        </div>
-                        <div class="skill-item">
-                            <h3>TensorFlow</h3>
-                            <div class="skill-bar" data-skill="50"></div>
-                        </div>
-                        <div class="skill-item">
-                            <h3>PostgreSQL</h3>
-                            <div class="skill-bar" data-skill="70"></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="github" class="github-section">
-                <div class="container">
-                    <h2>GitHub Activity</h2>
-                    <div class="github-content">
-                        <div class="github-profile">
-                            <img src="images/jan_profil_pic.jpeg" alt="Jan Kirschke GitHub Avatar" class="github-avatar">
-                        </div>
-                        <div class="github-stats">
-                            <div class="github-stat">
-                                <div class="github-stat-value" id="repo-count">42</div>
-                                <div class="github-stat-label">Repositories</div>
-                            </div>
-                            <div class="github-stat">
-                                <div class="github-stat-value" id="commit-count">1337</div>
-                                <div class="github-stat-label">Commits</div>
-                            </div>
-                            <div class="github-stat">
-                                <div class="github-stat-value" id="last-activity">2 days ago</div>
-                                <div class="github-stat-label">Last Activity</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="contact">
-                <div class="container">
-                    <h2>Contact</h2>
-                    <form class="contact-form">
-                        <input type="text" placeholder="Your Name" required>
-                        <input type="email" placeholder="Your Email" required>
-                        <textarea placeholder="Your Message" required></textarea>
-                        <button type="submit">Send Message</button>
-                    </form>
-                </div>
-            </section>
-        </main>
-
-        <footer>
-            <p>© 2024 Jan Kirschke. All rights reserved.</p>
-        </footer>
+        <canvas id="text-canvas"></canvas>
+        <nav>
+            <a href="/portfolio">Portfolio</a>
+            <a href="/blog">Blog</a>
+            <a href="/kalender">Kalender</a>
+        </nav>
+        <div class="social-links">
+            <a href="https://github.com/Jan-Kirschke" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/Jan-Kirschke" target="_blank"><i class="fab fa-linkedin"></i></a>
+            <a href="https://www.instagram.com/JanKirschke_Official" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="mailto:mail@jankirschke.de"><i class="fas fa-envelope"></i></a>
+        </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        const canvas = document.getElementById('text-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = 600;
+        canvas.height = 200;
+        
+        let particles = [];
+        const text = 'Jan Kirschke';
+        let mouseX = 0, mouseY = 0;
+        
+        // Text Setup
+        ctx.font = '70px Arial';
+        ctx.fillStyle = 'black';
+        ctx.textAlign = 'center';
+        ctx.fillText(text, canvas.width/2, canvas.height/2);
+        
+        // Pixel Daten bekommen
+        const textData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.baseX = x;
+                this.baseY = y;
+                this.size = 2;
+                this.density = (Math.random() * 30) + 1;
+            }
+            
+            draw() {
+                ctx.fillStyle = 'blue';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.fill();
+            }
+            
+            update() {
+                let dx = mouseX - this.x;
+                let dy = mouseY - this.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+                let forceDirectionX = dx / distance;
+                let forceDirectionY = dy / distance;
+                let maxDistance = 100;
+                let force = (maxDistance - distance) / maxDistance;
+                
+                if (distance < maxDistance) {
+                    this.x -= forceDirectionX * force * this.density;
+                    this.y -= forceDirectionY * force * this.density;
+                } else {
+                    if (this.x !== this.baseX) {
+                        dx = this.baseX - this.x;
+                        this.x += dx/10;
+                    }
+                    if (this.y !== this.baseY) {
+                        dy = this.baseY - this.y;
+                        this.y += dy/10;
+                    }
+                }
+            }
+        }
+
+        function init() {
+            particles = [];
+            
+            for (let y = 0; y < textData.height; y += 4) {
+                for (let x = 0; x < textData.width; x += 4) {
+                    if (textData.data[(y * 4 * textData.width) + (x * 4) + 3] > 128) {
+                        particles.push(new Particle(x, y));
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            requestAnimationFrame(animate);
+        }
+
+        canvas.addEventListener('mousemove', function(e) {
+            let rect = canvas.getBoundingClientRect();
+            mouseX = e.clientX - rect.left;
+            mouseY = e.clientY - rect.top;
+        });
+
+        canvas.addEventListener('mouseleave', function() {
+            mouseX = undefined;
+            mouseY = undefined;
+        });
+
+        init();
+        animate();
+    </script>
 </body>
 </html>

@@ -1,34 +1,61 @@
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      e.preventDefault();
-      document.querySelector(this.getAttribute('href')).scrollIntoView({
-        behavior: 'smooth'
+document.addEventListener('DOMContentLoaded', () => {
+  const nameElement = document.getElementById('name');
+  let originalText = nameElement.innerText;
+  let particles = [];
+
+  nameElement.addEventListener('mouseover', () => {
+      // Text in einzelne Buchstaben aufteilen
+      particles = originalText.split('').map((char, i) => {
+          return {
+              char: char,
+              x: 0,
+              y: 0,
+              originalX: i * 20, // Abstand zwischen Buchstaben
+              originalY: 0,
+              vx: (Math.random() - 0.5) * 10,
+              vy: (Math.random() - 0.5) * 10
+          };
       });
-    });
+
+      // Animation starten
+      animate();
   });
-  
-  const skillBars = document.querySelectorAll('.skill-bar');
-  const animateSkills = () => {
-    skillBars.forEach(bar => {
-      const barTop = bar.getBoundingClientRect().top;
-      if (barTop < window.innerHeight) {
-        bar.style.width = `${bar.dataset.skill}%`;
+
+  nameElement.addEventListener('mouseout', () => {
+      // Text zurücksetzen
+      nameElement.innerText = originalText;
+  });
+
+  function animate() {
+      nameElement.innerHTML = '';
+      let finished = true;
+
+      particles.forEach(particle => {
+          // Bewegung der Partikel
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+
+          // Zurück zur Originalposition
+          particle.vx *= 0.95;
+          particle.vy *= 0.95;
+          particle.x += (particle.originalX - particle.x) * 0.1;
+          particle.y += (particle.originalY - particle.y) * 0.1;
+
+          // Span-Element für jeden Buchstaben erstellen
+          const span = document.createElement('span');
+          span.innerText = particle.char;
+          span.style.transform = `translate(${particle.x}px, ${particle.y}px)`;
+          span.style.display = 'inline-block';
+          nameElement.appendChild(span);
+
+          // Prüfen ob Animation noch läuft
+          if (Math.abs(particle.vx) > 0.1 || Math.abs(particle.vy) > 0.1) {
+              finished = false;
+          }
+      });
+
+      if (!finished) {
+          requestAnimationFrame(animate);
       }
-    });
-  };
-  
-  window.addEventListener('scroll', animateSkills);
-  animateSkills();
-  
-  const fadeElems = document.querySelectorAll('.fade-in');
-  const fadeIn = () => {
-    fadeElems.forEach(elem => {
-      const elemTop = elem.getBoundingClientRect().top;
-      if (elemTop < window.innerHeight) {
-        elem.classList.add('visible');
-      }
-    });
-  };
-  
-  window.addEventListener('scroll', fadeIn);
-  fadeIn();
+  }
+});
