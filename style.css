@@ -1,43 +1,341 @@
-.particle-text {
-  font-size: 3em;
-  cursor: pointer;
-  position: relative;
-  display: inline-block;
-  margin: 20px;
-  font-weight: bold;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.particle-text span {
-  position: relative;
-  transition: transform 0.3s;
+body {
+    font-family: 'Arial', sans-serif;
+    background: #000;
+    color: #fff;
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  text-align: center;
+/* Sterne im Hintergrund */
+.stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.stars::before,
+.stars::after {
+    content: '';
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    box-shadow: 
+        200px 100px rgba(255, 255, 255, 0.6),
+        400px 300px rgba(255, 255, 255, 0.7),
+        600px 150px rgba(255, 255, 255, 0.5),
+        800px 400px rgba(255, 255, 255, 0.8),
+        1000px 250px rgba(255, 255, 255, 0.6),
+        1200px 350px rgba(255, 255, 255, 0.7),
+        300px 500px rgba(255, 255, 255, 0.5),
+        700px 600px rgba(255, 255, 255, 0.8),
+        1100px 500px rgba(255, 255, 255, 0.6),
+        500px 200px rgba(255, 255, 255, 0.7);
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 4rem;
+    position: relative;
+    z-index: 100;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo-icon {
+    width: 50px;
+    height: 50px;
+    background: #fff;
+    color: #000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.logo-text {
+    font-size: 1.2rem;
+    letter-spacing: 0.3rem;
+    font-weight: 300;
 }
 
 nav {
-  margin: 20px 0;
+    display: flex;
+    gap: 3rem;
 }
 
 nav a {
-  margin: 0 15px;
-  text-decoration: none;
-  color: #333;
-  font-size: 1.2em;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: opacity 0.3s;
 }
 
-.social-links {
-  margin-top: 20px;
+nav a:hover {
+    opacity: 0.7;
 }
 
-.social-links a {
-  margin: 0 10px;
-  font-size: 1.5em;
-  color: #333;
+.auth-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-outline {
+    background: transparent;
+    color: #fff;
+    border: 2px solid #fff;
+    padding: 0.7rem 2.5rem;
+    border-radius: 50px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    letter-spacing: 0.05rem;
+}
+
+.btn-outline:hover {
+    background: #fff;
+    color: #000;
+}
+
+/* Main Content */
+main {
+    display: flex;
+    padding: 2rem 4rem;
+    position: relative;
+    z-index: 10;
+    min-height: calc(100vh - 200px);
+}
+
+.content {
+    flex: 1;
+    max-width: 600px;
+    padding-right: 2rem;
+}
+
+h1 {
+    font-size: 4rem;
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+    line-height: 1.1;
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: 300;
+    margin-bottom: 2rem;
+}
+
+.content p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.pagination {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.dot.active {
+    background: #fff;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1.5rem;
+}
+
+/* Grafik-Bereich */
+.graphic {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shape {
+    position: absolute;
+    background: linear-gradient(135deg, #ff8c42, #ff6b35);
+    border-radius: 50%;
+    box-shadow: 0 20px 60px rgba(255, 107, 53, 0.3);
+}
+
+.shape-1 {
+    width: 200px;
+    height: 80px;
+    border-radius: 100px;
+    top: 30%;
+    right: 40%;
+    transform: rotate(-35deg);
+}
+
+.shape-2 {
+    width: 250px;
+    height: 90px;
+    border-radius: 100px;
+    top: 40%;
+    right: 25%;
+    transform: rotate(-35deg);
+}
+
+.shape-3 {
+    width: 300px;
+    height: 100px;
+    border-radius: 100px;
+    top: 50%;
+    right: 15%;
+    transform: rotate(-35deg);
+}
+
+.shape-4 {
+    width: 350px;
+    height: 110px;
+    border-radius: 100px;
+    top: 60%;
+    right: 5%;
+    transform: rotate(-35deg);
+}
+
+.shape-5 {
+    width: 150px;
+    height: 150px;
+    border-radius: 40% 60%;
+    bottom: 20%;
+    left: 10%;
+    background: linear-gradient(135deg, #ff8c42, #ff6b35);
+}
+
+.circle {
+    position: absolute;
+    background: linear-gradient(135deg, #ff8c42, #ff6b35);
+    border-radius: 50%;
+}
+
+.circle-1 {
+    width: 80px;
+    height: 80px;
+    top: 15%;
+    right: 20%;
+}
+
+.circle-2 {
+    width: 50px;
+    height: 50px;
+    top: 20%;
+    right: 10%;
+}
+
+.circle-3 {
+    width: 30px;
+    height: 30px;
+    top: 12%;
+    right: 25%;
+}
+
+.stripe-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 500px;
+    height: 100%;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 3px,
+        rgba(255, 140, 66, 0.1) 3px,
+        rgba(255, 140, 66, 0.1) 6px
+    );
+    pointer-events: none;
+}
+
+/* Footer */
+footer {
+    display: flex;
+    gap: 3rem;
+    padding: 2rem 4rem;
+    position: relative;
+    z-index: 100;
+}
+
+footer a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: opacity 0.3s;
+}
+
+footer a:hover {
+    opacity: 0.7;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    main {
+        flex-direction: column;
+    }
+    
+    .graphic {
+        margin-top: 3rem;
+        min-height: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 1.5rem 2rem;
+    }
+    
+    nav {
+        gap: 1.5rem;
+    }
+    
+    main {
+        padding: 1.5rem 2rem;
+    }
+    
+    h1 {
+        font-size: 2.5rem;
+    }
+    
+    footer {
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        padding: 1.5rem 2rem;
+    }
 }
