@@ -70,6 +70,7 @@ header {
     height: 50px;
     background: #fff;
     color: #000;
+    border: 2px solid #20C20E;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -77,6 +78,13 @@ header {
     font-size: 1.5rem;
     font-weight: bold;
     font-style: italic;
+    overflow: hidden;
+}
+.logo-icon img {
+    width: 100%; /* Füllt die volle Breite des Kreises */
+    height: 100%; /* Füllt die volle Höhe des Kreises */
+    /* * Sorgt dafür, dass das Bild den Kreis ausfüllt   * ohne sich zu verzerren (schneidet stattdessen Ränder a  */
+    object-fit: cover; 
 }
 
 .logo-text {
@@ -104,7 +112,7 @@ nav a:hover {
 .auth-buttons .btn-outline {
     background: transparent;
     color: #fff;
-    border: 2px solid #fff;
+    border: 1px solid #20C20E;
     padding: 0.7rem 2.5rem;
     border-radius: 50px;
     font-size: 1rem;
@@ -236,8 +244,8 @@ main {
     /* Modernerer Look (Gelb/Schwarz) */
     background: repeating-linear-gradient(
         -45deg,
-        #ffc107,
-        #ffc107 15px,
+        #ffc10767,
+        #ffc10767 15px,
         #000 15px,
         #000 30px
     );
@@ -257,7 +265,7 @@ main {
 .banner-text span {
     font-size: 16px; 
     font-weight: bold;
-    color: #000; /* Schwarz auf Gelb */
+    color: #ffffff; /* Schwarz auf Gelb */
     text-transform: uppercase;
     font-family: 'Inter', 'Arial', sans-serif; 
     padding: 0 1rem; /* Besserer Abstand */
