@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Courier+New&display=swap');
+
+/* --- 1. Global Reset & Theme --- */
 * {
     margin: 0;
     padding: 0;
@@ -5,7 +9,7 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Inter', 'Arial', sans-serif;
     background: #000;
     color: #fff;
     overflow-x: hidden;
@@ -13,7 +17,7 @@ body {
     min-height: 100vh;
 }
 
-/* Sterne im Hintergrund */
+/* --- 2. Hintergrund (Sterne) --- */
 .stars {
     position: fixed;
     top: 0;
@@ -45,7 +49,7 @@ body {
         500px 200px rgba(255, 255, 255, 0.7);
 }
 
-/* Header */
+/* --- 3. Header & Navigation --- */
 header {
     display: flex;
     justify-content: space-between;
@@ -97,15 +101,7 @@ nav a:hover {
     opacity: 0.7;
 }
 
-.auth-buttons {
-    display: flex;
-    gap: 1rem;
-    border-color: #ff6b35;
-    border-width: 10rem;
-    border: #ff6b35;
-}
-
-.btn-outline {
+.auth-buttons .btn-outline {
     background: transparent;
     color: #fff;
     border: 2px solid #fff;
@@ -122,198 +118,179 @@ nav a:hover {
     color: #000;
 }
 
-/* Main Content */
+/* --- 4. Footer --- */
+footer {
+    display: flex;
+    justify-content: center; /* Zentriert für einen cleanen Look */
+    gap: 3rem;
+    padding: 2rem 4rem;
+    position: relative;
+    z-index: 100;
+    border-top: 1px solid #333; /* Leichte Trennlinie */
+}
+
+footer a {
+    color: #888; /* Weniger aufdringlich */
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.3s;
+}
+
+footer a:hover {
+    color: #fff;
+}
+
+/* --- 5. Main Content (Allgemein) --- */
 main {
     display: flex;
     padding: 2rem 4rem;
     position: relative;
     z-index: 10;
-    min-height: calc(100vh - 200px);
+    min-height: calc(100vh - 200px); /* Platz für Header/Footer */
+    align-items: center; /* Vertikal zentrieren */
+    gap: 2rem;
 }
 
-.content {
-    flex: 1;
-    max-width: 600px;
-    padding-right: 2rem;
+/* --- 6. Spezifisch: Index-Seite (Hero) --- */
+
+/* NEU: Eigener Style für die zentrierte Index-Seite */
+.main-index {
+    justify-content: center; /* Zentriert den Block horizontal */
+    text-align: center; /* Zentriert den Text im Block */
 }
 
-h1 {
-    font-size: 4rem;
-    font-weight: 300;
+.hero-content {
+    flex-basis: 100%; /* Nimmt verfügbaren Platz ein */
+    max-width: 800px; /* Aber nicht zu breit werden */
+    opacity: 0;
+    animation: fadeIn 0.8s 0.3s ease-out forwards;
+}
+
+.hero-content .intro-line {
+    font-size: 1.2rem;
+    color: #aaa;
     margin-bottom: 0.5rem;
-    line-height: 1.1;
 }
 
-h2 {
-    font-size: 2rem;
+.hero-content h1 {
+    font-size: 4.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    /* Cooler Gradient-Effekt */
+    background: linear-gradient(90deg, #fff, #aaa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-content h2 {
+    font-size: 2.5rem;
     font-weight: 300;
-    margin-bottom: 2rem;
+    color: #888;
+    margin-bottom: 1rem;
 }
 
-.content p {
-    font-size: 0.95rem;
-    line-height: 1.7;
-    margin-bottom: 2rem;
-    opacity: 0.9;
+.hero-content .description {
+    font-size: 1.2rem;
+    color: #ccc;
 }
 
-.pagination {
+/* --- 7. Spezifisch: Projects-Seite (Under Construction) --- */
+.projects-main {
+    flex-direction: column;
+    justify-content: center; /* Zentriert die Kunst */
+    align-items: center; /* Zentriert die Kunst */
+    width: 100%;
+}
+
+/* NEU: Container für ASCII-Kunst und Banner */
+.construction-art-container {
+    position: relative; /* Wichtig, damit das Banner darin positioniert werden kann */
     display: flex;
-    gap: 0.8rem;
-    margin-bottom: 2rem;
-}
-
-.dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.dot.active {
-    background: #fff;
-}
-
-.cta-buttons {
-    display: flex;
-    gap: 1.5rem;
-}
-
-/* Grafik-Bereich */
-.graphic {
-    flex: 1;
-    position: relative;
-    display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    opacity: 0;
+    animation: fadeIn 0.8s 0.5s ease-out forwards;
 }
 
-.shape {
-    position: absolute;
-    background: linear-gradient(135deg, #ff8c42, #ff6b35);
-    border-radius: 50%;
-    box-shadow: 0 20px 60px rgba(255, 107, 53, 0.3);
+/* NEU: ASCII-Kunst-Styling ist jetzt hier */
+.ascii-art {
+    font-family: 'Courier New', Courier, monospace;
+    color: rgba(204, 204, 204, 0.15); /* Subtiler für den "Wasserzeichen"-Look */
+    font-size: 10px; 
+    line-height: 1.1;
+    white-space: pre; 
+    text-align: left;
+    overflow-x: auto; /* Falls es zu breit ist */
+    transform: scale(1.1); /* Etwas größer */
+    z-index: 10; /* Liegt hinter dem Banner */
 }
 
-.shape-1 {
-    width: 200px;
-    height: 80px;
-    border-radius: 100px;
-    top: 30%;
-    right: 40%;
-    transform: rotate(-35deg);
-}
-
-.shape-2 {
-    width: 250px;
-    height: 90px;
-    border-radius: 100px;
-    top: 40%;
-    right: 25%;
-    transform: rotate(-35deg);
-}
-
-.shape-3 {
-    width: 300px;
-    height: 100px;
-    border-radius: 100px;
+/* "Polizeiband" / Baustellen-Banner */
+.police-banner {
+    position: absolute; /* Absolut zum .construction-art-container */
     top: 50%;
-    right: 15%;
-    transform: rotate(-35deg);
-}
-
-.shape-4 {
-    width: 350px;
-    height: 110px;
-    border-radius: 100px;
-    top: 60%;
-    right: 5%;
-    transform: rotate(-35deg);
-}
-
-.shape-5 {
-    width: 150px;
-    height: 150px;
-    border-radius: 40% 60%;
-    bottom: 20%;
-    left: 10%;
-    background: linear-gradient(135deg, #ff8c42, #ff6b35);
-}
-
-.circle {
-    position: absolute;
-    background: linear-gradient(135deg, #ff8c42, #ff6b35);
-    border-radius: 50%;
-}
-
-.circle-1 {
-    width: 80px;
-    height: 80px;
-    top: 15%;
-    right: 20%;
-}
-
-.circle-2 {
-    width: 50px;
-    height: 50px;
-    top: 20%;
-    right: 10%;
-}
-
-.circle-3 {
-    width: 30px;
-    height: 30px;
-    top: 12%;
-    right: 25%;
-}
-
-.stripe-overlay {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 500px;
-    height: 100%;
+    left: -5%; /* Lässt es überlappen */
+    width: 110%;
+    transform: translateY(-50%) rotate(-4deg);
+    
+    /* Modernerer Look (Gelb/Schwarz) */
     background: repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 3px,
-        rgba(255, 140, 66, 0.1) 3px,
-        rgba(255, 140, 66, 0.1) 6px
+        -45deg,
+        #ffc107,
+        #ffc107 15px,
+        #000 15px,
+        #000 30px
     );
-    pointer-events: none;
+    border-top: 2px solid #000;
+    border-bottom: 2px solid #000;
+    padding: 8px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    z-index: 20; /* Liegt über der ASCII-Kunst */
 }
 
-/* Footer */
-footer {
-    display: flex;
-    gap: 3rem;
-    padding: 2rem 4rem;
-    position: relative;
-    z-index: 100;
+.banner-text {
+    display: inline-block;
+    animation: scroll-left 10s linear infinite;
 }
 
-footer a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 0.95rem;
-    transition: opacity 0.3s;
+.banner-text span {
+    font-size: 16px; 
+    font-weight: bold;
+    color: #000; /* Schwarz auf Gelb */
+    text-transform: uppercase;
+    font-family: 'Inter', 'Arial', sans-serif; 
+    padding: 0 1rem; /* Besserer Abstand */
 }
 
-footer a:hover {
-    opacity: 0.7;
+/* --- 8. Animationen --- */
+
+/* Text-Scroll-Animation */
+@keyframes scroll-left {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
 }
 
-/* Responsive Design */
+/* Fade-In-Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- 9. Responsive Design --- */
 @media (max-width: 1024px) {
     main {
         flex-direction: column;
+        text-align: center;
     }
-    
-    .graphic {
-        margin-top: 3rem;
-        min-height: 400px;
+    .ascii-art {
+        font-size: 8px; /* Kleiner auf Mobilgeräten */
     }
 }
 
@@ -323,22 +300,24 @@ footer a:hover {
         gap: 1.5rem;
         padding: 1.5rem 2rem;
     }
-    
     nav {
         gap: 1.5rem;
+        flex-wrap: wrap; /* Besser für kleine Screens */
+        justify-content: center;
     }
-    
     main {
         padding: 1.5rem 2rem;
     }
-    
-    h1 {
-        font-size: 2.5rem;
+    .hero-content h1 {
+        font-size: 3rem;
     }
-    
+    .hero-content h2 {
+        font-size: 1.8rem;
+    }
     footer {
-        flex-wrap: wrap;
-        gap: 1.5rem;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
         padding: 1.5rem 2rem;
     }
 }
