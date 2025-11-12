@@ -329,3 +329,94 @@ main {
         padding: 1.5rem 2rem;
     }
 }
+
+/* --- 10. Statische Seiten (Impressum, Kontakt) --- */
+
+/* * Allgemeiner Container für statische Inhaltsseiten wie Kontakt & Impressum.
+ * Zentriert den Inhaltsblock auf der Seite.
+*/
+.main-static-page {
+    justify-content: center; /* Zentriert den Inhaltsblock horizontal */
+    align-items: center;     /* Zentriert den Inhaltsblock vertikal */
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    width: 100%;
+    text-align: center;
+}
+
+/* * Spezieller Container für die Kontakt-Box.
+ * Ähnlich wie .legal-content, aber für zentrierten Text.
+*/
+.contact-content {
+    max-width: 600px;
+    width: 100%;
+    padding: 3rem;
+    background: rgba(20, 20, 20, 0.8); /* Leicht transparenter Hintergrund */
+    border: 1px solid #333;
+    border-radius: 8px;
+    
+    /* Fade-In-Animation (aus deiner bestehenden CSS) */
+    opacity: 0;
+    animation: fadeIn 0.8s 0.3s ease-out forwards;
+}
+
+.contact-content h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+.contact-content p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #ccc;
+    margin-bottom: 2rem;
+    max-width: 450px; /* Verhindert, dass der Text zu breit wird */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* * Ein großer, auffälliger Button für die E-Mail
+ * (basiert auf deinem .btn-outline)
+*/
+.btn-contact {
+    display: inline-block;
+    background: #fff;
+    color: #000;
+    border: 2px solid #fff;
+    padding: 0.8rem 3rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    letter-spacing: 0.05rem;
+    margin-bottom: 1.5rem;
+}
+
+.btn-contact:hover {
+    background: transparent;
+    color: #fff;
+}
+
+/* Der kleine Text unter dem Button */
+.contact-alternative {
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 0;
+}
+
+.contact-alternative a {
+    color: #fff;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+/* * WICHTIG: Falls du .legal-content (vom Impressum) hast, 
+ * stelle sicher, dass es linksbündig bleibt:
+*/
+.legal-content {
+    text-align: left;
+}
