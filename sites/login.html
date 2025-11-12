@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Jan Kirschke</title>
+    
+    <link rel="stylesheet" href="../style.css">
+
+    <style>
+        /* == Ladesymbol (Loader) == */
+        #loader-wrapper {
+            position: fixed; /* Bleibt an Ort und Stelle, auch beim Scrollen */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #111; /* Dunkler Hintergrund, passend zum Design */
+            z-index: 9999; /* Stellt sicher, dass es über allem liegt */
+            display: flex; /* Zentriert den Spinner */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loader {
+            border: 8px solid #f3f3f3; /* Heller Kreis */
+            border-top: 8px solid #3498db; /* Blaue Farbe für die Drehung */
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1.5s linear infinite; /* Animations-Setup */
+        }
+
+        /* Die Dreh-Animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* == Login-Formular == */
+        .login-container {
+            max-width: 400px;
+            margin: 5rem auto; /* Zentriert die Box mit Abstand nach oben */
+            padding: 2rem;
+            border: 1px solid #444;
+            border-radius: 8px;
+            background-color: rgba(20, 20, 30, 0.5); /* Leicht transparenter Hintergrund */
+        }
+
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-container form div {
+            margin-bottom: 1rem;
+        }
+
+        .login-container label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        /* Wir stylen die Inputs, damit sie zum Rest passen */
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #222;
+            border: 1px solid #555;
+            border-radius: 4px;
+            color: #fff;
+            box-sizing: border-box; /* Stellt sicher, dass padding die Breite nicht sprengt */
+        }
+
+        /* Den Button auf volle Breite strecken */
+        .login-container .btn-outline {
+            width: 100%;
+            padding: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        /* Für die IP-Info */
+        #ip-info {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: #888;
+            font-family: monospace; /* Passt gut zu einer IP-Adresse */
+        }
+    </style>
+</head>
+<body>
+    <div id="loader-wrapper">
+        <div class="loader"></div>
+    </div>
+
+    <div class="stars"></div>
+    
+    <header>
+        <div class="logo">
+             <div class="logo-icon"><img src="../images/jan-kirschke-ascii.png" alt="Jan Kirschke Logo"></div>
+            <span class="logo-text">Jan Kirschke</span>
+        </div>
+        <nav>
+            <a href="../index.html">Home</a>
+            <a href="code_n_caffee.html">Code & Caffee</a>
+            <a href="projects.html">Projects</a>
+            <a href="contact.html">Contact Me</a>
+        </nav>
+        <div class="auth-buttons">
+            <a href="login.html" class="btn-outline">Login</a>
+        </div>
+    </header>
+
+    <main class="main-index"> <div class="login-container">
+            <h2>Secure Login</h2>
+            <form id="login-form">
+                <div>
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div>
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn-outline">Login</button>
+            </form>
+            
+            <p id="ip-info">Checking connection...</p>
+        </div>
+    </main>
+
+    <footer>
+        <a href="impressum.html">Impressum</a>
+        <a href="https://github.com/Jan-Kirschke" target="_blank">Github</a>
+        <a href="https://www.linkedin.com/in/jan-kirschke" target="_blank">LinkedIn</a>
+        <a href="https://www.kaggle.com/jankirschke42" target="_blank">Kaggle</a>
+    </footer>
+
+    <script>
+        // Diese Funktion wird ausgeführt, sobald die HTML-Struktur geladen ist
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Finde die HTML-Elemente
+            const loader = document.getElementById('loader-wrapper');
+            const ipInfoElement = document.getElementById('ip-info');
+
+            // Starte den IP-Check
+            // Wir nutzen einen kostenlosen Dienst (api.ipify.org), um die IP abzufragen
+            fetch('https://api.ipify.org?format=json')
+                .then(response => {
+                    // Prüfe, ob die Antwort erfolgreich war
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Wandle die Antwort in ein JSON-Objekt um
+                })
+                .then(data => {
+                    // Erfolg! Zeige die IP-Adresse an.
+                    ipInfoElement.textContent = 'Your IP: ' + data.ip;
+                })
+                .catch(error => {
+                    // Fehler! Zeige eine Fehlermeldung an.
+                    console.error('Error fetching IP:', error);
+                    ipInfoElement.textContent = 'Could not verify connection.';
+                })
+                .finally(() => {
+                    // EGAL ob Erfolg oder Fehler:
+                    // Blende das Ladesymbol aus.
+                    loader.style.display = 'none';
+                });
+        });
+    </script>
+
+</body>
+</html>
