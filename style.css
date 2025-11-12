@@ -420,3 +420,177 @@ main {
 .legal-content {
     text-align: left;
 }
+
+
+/* --- 11. Spezifisch: Code & Caffee Seite --- */
+
+/* Der Hauptcontainer für den Flyer-Inhalt */
+.event-flyer-content {
+    max-width: 750px; /* Breite des Flyers */
+    width: 100%;
+    padding: 2.5rem 3rem;
+    
+    /* Hintergrund wie auf dem Plakat, leicht transparent */
+    background: rgba(30, 30, 35, 0.9); 
+    border: 1px solid #444;
+    border-radius: 8px;
+    
+    text-align: left; /* Standard-Textausrichtung */
+    
+    /* Fade-In-Animation wiederverwenden */
+    opacity: 0;
+    animation: fadeIn 0.8s 0.3s ease-out forwards;
+}
+
+.event-flyer-content h1,
+.event-flyer-content h2,
+.event-flyer-content h3,
+.event-flyer-content .cta {
+    /* Die blockige Schriftart vom Plakat */
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    text-transform: uppercase; /* Alles in Großbuchstaben */
+}
+
+.event-flyer-content h1 {
+    font-size: 2.8rem;
+    color: #fafafa;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    letter-spacing: 2px;
+}
+
+.event-flyer-content h1 .icon-coffee {
+    color: #E07A5F; /* Kaffee-Orange */
+}
+
+.event-flyer-content h2 {
+    font-size: 1.4rem;
+    color: #aaa;
+    text-align: center;
+    margin-bottom: 2.5rem;
+    letter-spacing: 1px;
+}
+
+/* Die Box für WO? und WANN? */
+.when-where-box {
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+    background: rgba(10, 10, 10, 0.4); /* Dunklerer Akzent */
+    padding: 1.5rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 2.5rem;
+}
+
+.when-where-box .info-item {
+    text-align: center;
+}
+
+.when-where-box h3 {
+    font-size: 1.5rem;
+    color: #fff;
+    margin-bottom: 0.5rem;
+}
+
+.when-where-box p {
+    font-size: 1.1rem;
+    color: #ccc;
+}
+
+/* Die "Was erwartet dich?" Sektionen */
+.details-section {
+    margin-bottom: 2.5rem;
+}
+
+.details-section h3 {
+    font-size: 1.3rem;
+    color: #fff;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #555; /* Trennlinie */
+    padding-bottom: 0.5rem;
+}
+
+.details-section ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.details-section li {
+    display: flex;
+    align-items: center; /* Zentriert Icon und Text vertikal */
+    margin-bottom: 1.2rem;
+    font-size: 1.1rem;
+    color: #ccc;
+    line-height: 1.5;
+}
+
+.details-section li .icon {
+    font-size: 1.5rem;
+    color: #fff;
+    margin-right: 1.5rem; /* Abstand vom Icon zum Text */
+    width: 30px; /* Gibt allen Icons eine feste Breite */
+    text-align: center;
+}
+
+/* Call to Action */
+.cta {
+    font-size: 1.2rem;
+    color: #fafafa;
+    text-align: center;
+    margin-top: 2rem;
+    letter-spacing: 1px;
+}
+
+.contact {
+    font-family: 'Courier New', Courier, monospace;
+    text-transform: uppercase;
+    font-size: 1rem;
+    color: #888;
+    text-align: center;
+    margin-top: 1rem;
+    border-top: 1px solid #444;
+    padding-top: 1.5rem;
+}
+
+
+/* --- 11. Spezifisch: Code & Caffee (Flyer-Display) --- */
+
+/* Dieser Container hält das Bild, den Text und den QR-Code */
+.flyer-display-container {
+    width: 100%;
+    max-width: 500px; /* Setzt eine maximale Breite für den Flyer */
+    text-align: center; /* Zentriert den Text und den QR-Code */
+    
+    /* Fade-In-Animation wiederverwenden */
+    opacity: 0;
+    animation: fadeIn 0.8s 0.3s ease-out forwards;
+}
+
+/* Das Haupt-Flyer-Bild */
+.flyer-image {
+    width: 100%; /* Passt sich an den Container an */
+    height: auto; /* Behält das Seitenverhältnis bei */
+    border-radius: 8px; /* Schöne abgerundete Ecken */
+    border: 1px solid #444; /* Dezenter Rand */
+    margin-bottom: 1.5rem; /* Abstand nach unten zum Text */
+}
+
+/* Der Text zwischen Flyer und QR-Code */
+.flyer-subtext {
+    font-size: 1.1rem;
+    color: #ccc;
+    line-height: 1.6;
+    margin-bottom: 1.5rem; /* Abstand nach unten zum QR-Code */
+}
+
+/* Der QR-Code */
+.qr-code-image {
+    width: 100%;
+    max-width: 200px; /* Angenehme Größe für einen QR-Code */
+    height: auto;
+    filter: invert(100%);
+    background: white; /* WICHTIG: Weißer Hintergrund für gute Scanbarkeit */
+    padding: 10px;     /* Kleiner weißer Rand um den Code */
+    border-radius: 8px; /* Abgerundete Ecken */
+}
