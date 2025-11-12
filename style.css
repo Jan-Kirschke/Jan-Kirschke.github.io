@@ -236,7 +236,7 @@ main {
 /* "Polizeiband" / Baustellen-Banner */
 .police-banner {
     position: absolute; /* Absolut zum .construction-art-container */
-    top: 50%;
+    top: 70%;
     left: -5%; /* Lässt es überlappen */
     width: 110%;
     transform: translateY(-50%) rotate(-4deg);
