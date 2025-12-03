@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -6,30 +7,102 @@
     <title>Jan Kirschke - Data Science Student</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* == Spezielle Styles für die ASCII Art == */
-        #ascii-container {
-            position: absolute;
-            top: 50%;
-            right: 5%; /* Rechts positioniert */
-            transform: translateY(-50%);
-            z-index: -1; /* Hinter dem Text, aber vor dem Hintergrund */
-            opacity: 0.4; /* Leicht transparent, damit es dezent wirkt */
+        /* === Layout & Grid === */
+        .main-index {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 80vh; /* Volle Höhe nutzen */
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            position: relative;
+            gap: 2rem;
         }
 
+        /* Spalte 1: Code (Links) */
+        .code-column {
+            flex: 1;
+            text-align: left;
+            z-index: 1;
+            min-width: 350px;
+            padding-left: 20px;
+        }
+
+        /* Spalte 2: Text (Mitte) */
+        .hero-content {
+            flex: 1;
+            text-align: center; /* Zentriert den Namen */
+            z-index: 2;
+            min-width: 200px;
+        }
+
+        /* Spalte 3: ASCII Face (Rechts) */
+        .face-column {
+            flex: 1;
+            text-align: right;
+            z-index: 0;
+            opacity: 0.3; /* Dezent im Hintergrund */
+            min-width: 300px;
+            padding-right: 50px;
+        }
+
+        /* === PyCharm Style Code Block === */
         pre {
-            font-family: 'Courier New', Courier, monospace; /* Wichtig für ASCII: Monospace Font */
-            font-size: 10px; /* Klein genug, damit das Bild passt */
-            line-height: 8px; /* Zeilenabstand verringern für dichteres Bild */
-            color: #3498db; /* Matrix-Blau oder Grün, passend zum Theme */
-            white-space: pre; /* Behält Leerzeichen bei */
+            font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace; /* Moderne Coding Fonts */
+            font-size: 11px; /* Etwas größer für Lesbarkeit */
+            line-height: 1.6;
+            white-space: pre;
             margin: 0;
             overflow: hidden;
+
+            padding: 20px;
+
+            color: #a9b7c6; /* Default Text Color */
         }
 
-        /* Mobile Anpassung: Ausblenden oder verkleinern */
-        @media (max-width: 1000px) {
-            #ascii-container {
-                display: none; /* Auf Handys ist oft zu wenig Platz */
+        /* ASCII Art Anpassung */
+        #art-block {
+            font-size: 5px; /* Sehr fein für das Gesicht */
+            line-height: 7px;
+            color: #3498db; /* Matrix Blau/Türkis */
+            background: none; /* Kein Hintergrund für das Gesicht */
+            border: none;
+            box-shadow: none;
+        }
+
+        /* === Syntax Highlighting (Darcula Theme) === */
+        .k { color: #cc7832; font-weight: bold; } /* Keyword (def, class, if) */
+        .s { color: #6a8759; } /* String ("...") */
+        .f { color: #ffc66d; } /* Function (deploy_skills) */
+        .c { color: #a9b7c6; } /* Class (JanKirschke) */
+        .cm { color: #808080; font-style: italic; } /* Comment (# ...) */
+        .n { color: #6897bb; } /* Number/Constant */
+        .p { color: #a9b7c6; } /* Punctuation/Normal */
+
+        /* === Cursor Animation === */
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 14px;
+            background-color: #a9b7c6; /* Weißer Block */
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* === Mobile Anpassung === */
+        @media (max-width: 1200px) {
+            .code-column, .face-column {
+                display: none; /* Auf Tablets/Handys ausblenden für Fokus */
+            }
+            .main-index {
+                justify-content: center;
             }
         }
     </style>
@@ -54,6 +127,12 @@
     </header>
 
     <main class="main-index">
+        <!-- LINK: Python Code Animation -->
+        <div class="code-column">
+            <pre id="code-block"></pre>
+        </div>
+
+        <!-- MITTE: Dein Name -->
         <div class="hero-content">
             <p class="intro-line">Hi, my name is</p>
             <h1>Jan Kirschke.</h1>
@@ -61,8 +140,9 @@
             <p class="description">I build Software for Data</p>
         </div>
 
-        <div id="ascii-container">
-            <pre id="ascii-art"></pre>
+        <!-- RECHTS: ASCII Art -->
+        <div class="face-column">
+            <pre id="art-block"></pre>
         </div>
     </main>
 
@@ -75,61 +155,157 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const artContainer = document.getElementById('ascii-art');
+            const codeContainer = document.getElementById('code-block');
+            const artContainer = document.getElementById('art-block');
+
+            // === 1. Der Code als strukturierte Daten (Tokens) ===
+            // c: class (Farbe), t: text
+            // k=Keyword, s=String, f=Function, c=Class, cm=Comment, p=Plain
+            const codeTokens = [
+                {c: 'k', t: 'from '}, {c: 'p', t: 'reality '}, {c: 'k', t: 'import '}, {c: 'c', t: 'Hardware'}, {c: 'p', t: ', '}, {c: 'c', t: 'SignalProcessing'}, {c: 'p', t: '\n'},
+                {c: 'k', t: 'from '}, {c: 'p', t: 'innovation '}, {c: 'k', t: 'import '}, {c: 'c', t: 'DataScience'}, {c: 'p', t: ', '}, {c: 'c', t: 'Automation'}, {c: 'p', t: '\n\n'},
+                
+                {c: 'k', t: 'class '}, {c: 'c', t: 'JanKirschke'}, {c: 'p', t: '('}, {c: 'c', t: 'DataScience'}, {c: 'p', t: ', '}, {c: 'c', t: 'Hardware'}, {c: 'p', t: '):'}, {c: 'p', t: '\n'},
+                
+                {c: 's', t: '    """\n    Initializing digital profile...\n    Bridging the gap between Physical Signals\n    and Data Insights.\n    """'}, {c: 'p', t: '\n'},
+                
+                {c: 'k', t: '    def '}, {c: 'f', t: '__init__'}, {c: 'p', t: '('}, {c: 'k', t: 'self'}, {c: 'p', t: '):'}, {c: 'p', t: '\n'},
+                {c: 'p', t: '        self.stack = \t['}, {c: 's', t: '"Python"'}, {c: 'p', t: ', \n\t\t\t'}, {c: 's', t: '"SQL"'}, {c: 'p', t: ', \n\t\t\t'}, {c: 's', t: '"Javascipt"'}, {c: 'p', t: ', \n\t\t\t'}, {c: 's', t: '"CSS"'},{c: 'p', t: ', \n\t\t\t'}, {c: 's', t: '"HTML"'},{c: 'p', t: ', \n\t\t\t'}, {c: 's', t: '"R"'},{c: 'p', t: ']'}, {c: 'p', t: '\n'},
+                {c: 'p', t: '        self.origin = '}, {c: 's', t: '\t"Music Tech."'}, {c: 'p', t: '\n'},
+                {c: 'p', t: '        self.passion = '}, {c: 's', t: '\t"Sci-Fi Krimi Thriller Books"'}, {c: 'p', t: '\n\n'},
+
+                {c: 'k', t: '    def '}, {c: 'f', t: 'deploy_skills'}, {c: 'p', t: '('}, {c: 'k', t: 'self'}, {c: 'p', t: ')'}, {c: 'p', t: ' -> '}, {c: 'k', t: 'None'}, {c: 'p', t: ':'}, {c: 'p', t: '\n'},
+                {c: 'cm', t: '        # Converting coffee into code...'}, {c: 'p', t: '\n'},
+                {c: 'cm', t: '        # Optimizing workflows...'}, {c: 'p', t: '\n'},
+                {c: 'k', t: '        if '}, {c: 'p', t: 'self.origin '}, {c: 'k', t: 'and '}, {c: 'p', t: 'self.passion:'}, {c: 'p', t: '\n'},
+                {c: 'k', t: '            return '}, {c: 'f', t: 'render_ascii_art()'}, {c: 'p', t: '\n\n'},
+
+                {c: 'k', t: 'if '}, {c: 'f', t: '__name__ '}, {c: 'p', t: '== '}, {c: 's', t: '"__main__"'}, {c: 'p', t: ':'}, {c: 'p', t: '\n'},
+                {c: 'p', t: '    profile = JanKirschke()'}, {c: 'p', t: '\n'},
+                {c: 'p', t: '    profile.deploy_skills()'}
+            ];
+
+            // === 2. Das ASCII Gesicht (Platzhalter, muss exakt formatiert bleiben) ===
+            const asciiFace = `
+                                                                    .   ......    ..:-..:..                                                                   
+                                                                   .....   :::  .:..:+=:-:::.                                                                 
+                                                              .     .::=-   :-:.-=+-:+#=-:===.                                                                
+                                                             .::... .:=+#*-  :---=*#*=##*-:++-.                                                               
+                                                            .:-=:--: .-+##%#=.:--:=+++*%%%+-.--. ..                                                           
+                                                          .:-=*##+++: .:=#%@@%+--=:=++*%@@@#+::::---.                                                         
+                                                          .-=+*###**+- ..:-+*%%@#++=+####@@@%%*=-=+*+:.                                                       
+                                                        ..:-=+=::-=+**+=-----==*#%%###%%%#%@@@%%#*+*#+=.                                                      
+                                                     ::...:=+-.:-+#@@%@@%%#******##%%####%#%@@@@@@####=..                                                     
+                                                    .-++-..:..:-*###*#***++++++++++=======++*%@@.@@@%#+=:                                                     
+                                                    :=+*##*:.:-#*+====-:::::.::::.........:-+*%@@@@@@%#=:                                                     
+                                                   :=+=+++=-:-+-::.....       ......     ...-=*#@@@@@@@%*.                                                    
+                                                  .::-==-=-=--:                ....      ....:=+#%%@@@@@#:                                                    
+                                                    .=*+--++:                  ......  ......:-=+**#@@@%*:                                                    
+                                                    +**=++*-                   ...............::-=+*#%%*-.                                                    
+                                                    --=*+++.                    .................:-+**#*=                                                     
+                                                     ::=++=                      .........:::.....:=+**+=                                                     
+                                                      -+=-:      .:...          ....:-==+++++=-:...:+**+.                                                     
+                                                      :++-    .:-==+***+=-:......:-=+****+=---:--:..:**:                                                      
+                                                        +:    .   .:-+++++=::...:-==+++==--:::::::...+=                                                       
+                                                        -.       ::-+*##+=:.   ..:-=+*####**+=-::....=:                                                       
+                                                        .:     :=*=*@@##%*=.   ..:-=+*#*#@%###*=::...=:                                                       
+                                                       ...     :-=-+**+**=:    ..:---=+++++==---::...:.:.                                                     
+                                                      ...         .:-===-:.    ..::::---==--:::........--                                                     
+                                                      .=           .....        .::::.:::::............:-                                                     
+                                                      .-                        ....:................:-::                                                     
+                                                       ..:                      ....:::...............=-:.                                                    
+                                                       .::           ...         ....:::..............-::                                                     
+                                                                    .....      .::-:::::::::..::::.......                                                     
+                                                                   ....  ..:: .:-=*=::...:::::::.....-.                                                       
+                                                                   .       . .:-:::::......::::.......                                                        
+                                                                            ..:::::::::......:......                                                          
+                                                                            .:::::::::.::::..:......                                                          
+                                                                     :=::::-=++**+**+++==-:.........                                                          
+                                                                            :---------:.............                                                          
+                                                                             :::::::...............                                                           
+                                                                             .::::::............:.                                                            
+                                                                              .:::::.........:::.                                                             
+                                                                               ............::::.                                                              
+                                                             :#.               .......:.::--:...*=                                                            
+                                                            =%@:             ..::::::-----:.....@@*                                                           
+                                                           *%@.-          ..:--====++==-:......:@.@*                                                          
+                                                         :+%%@.#.            .:-=++=-::........=..@%*-                                                        
+                                                       .=+#@%@@@+.             ::-::::........:*.@@@%#*.                                                      
+                                                      :=+*%@%@@@%+:            ...::.........:=@.@@@@###=:.                                                   
+                                                 :-++++++*%@%@@@@#+=:          .............:-%@.@@@@######*+=:.                                              
+                                             :=+##%#*++**#@@%%@.@%#*+-:..       ..........::-#@@@@@@@%##%%%#%%%#*+-:.                                         
+                                        .:=*#%%%%%%******#@.%%@@@@%#*+=-:... ............::-*@@@@@@@@%##%%%%#%%%@%%%#*=-:                                     
+                                   .-=+*##%%%@@@%%******#%@.@%%%@@%%##+=-:...::.........::-*%%%@@%@.@%%#%%%%%#%%%%%%%%%%%#*+=:                                
+                              .-=+*#######%%@@%%@*#*****#%@.@%%%@@@###*+=::.:::::.......::+#%%@@@@@.@%%#%%%%%%%%%%%%%%%%%%##%%%*+=:                           
+                          .-+*##*#######%%%%%%%@#**#****#@@..%%%%@@%++*+=-:..::::... ...:+*##%@@@@@.@@%%%%%%%%%#%%%#%%%%%##########*=.                        
+                        -+***##########%%%%%%%%%*#******%@...@@@@..@#===-:..........  ..=+*%%%@.@@..@@%%%%%%%%%##%%%%%%%%%############+                       
+                      .+*****#########%%@@%%%%%*******+*%@@..@@@...@@@*-::........... .-=*%%%@......@@%%%%%%%%%%##%%%%%%%%%%##########*+.                     
+                     :+*****##########%@@@%%%%*##***++*#@@@..@@.....@@@@*:............-=*%@@@......@@@%%%%%%%%%%%##%%%%%%%%%%#########**+.                    
+                    :=++***######%####%@@@@%%*####*++=+#@@@@.@@........@@@*:........:=*%@@........@@%%%%%%%%%%%%%#%#%%%%%%%%%%########*#*=.                   
+                   -=+*+**#######%##*#@@@@@#+**##+**#%@@@@@%@.............@@=....:--+@............@@@%%###%#%%%%####*%%%%%%%%%########*##*-                   
+                  .=+**+*+#%%%%##%%#*#@@@@@#####*#%@..@@@.%#@@..............@*::-===%@.........@@%#@@.@@@%%#%%%%%%%%%%%%%%%%%%############+:                  
+                  -=##*+++%%%%%##%%#*#@@@@@%%%@%*#@..@%#%@%#@@@@..........@@@@%*+++*@.........@@%###@@@@@@@@@@@@%%%%%%%%%%%%%##############=                  
+                 .=+%%**++%@@%%###%**#@@@@%##%%**#@@@@%*%@.@%%@@@.........@@..@%**#@........@@%%###@@@@@@@@%%%%%%%%%%%%%%%%%%#####%%##*####+:                 
+                 :=*%@#***%@@%%%###**%@@@%#####**%@@@%#*#@..@##@@.........@@@@.@#%.........@@###%@@@@%%%%%%%%%%%%#####%%#%%%%##*##%%%#*####*-                 
+                 ==*%@@#**@@@%%%##*+*%@@%%####**#%%%%%#*#@..@%%#%@........@%@@.@@..........%#%@%%@@@@%%%%%%%%%%%#######%##%%###*##%%%#*#%%%#=:                
+                :==+#@@@#*@@@%%%#*++#%@@%#*##***#%%%%%#+#@..@%%@#%@............@@.........%#%@@%%%@@%%%%%%%%%%################**##%%%#*%%%%*==                
+               .-=++#@@@%*@@@@%##*+*#@@%%#*#***#%%%%%%#+*%@@@%%@#*%...........@@.........%#%%@@%%%@@%%#%%%%%%#################**##%%%*#%%%#*=+:               
+               :-=++*%@.@#%@@%%#*+=*#%%%###****#%%%%%%#+*%@@@@@%%#+%...@.@@@@.@@........@*%%%%%%%%%@%%#%%%%%##################**##%%%#%%%%#+++=               
+              .-=+++#%@..#%@@%#**+=*#%%%#*#***#%%%%%%%#+*%@@%%@@%#**@........@@.........#%%%%%%%%#%%%##%%%%%##################**##%%%#%%%%#=*++:
+              `;
+
+            // === 3. Typing Logic ===
+            // Cursor Element erstellen
+            const cursor = document.createElement('span');
+            cursor.className = 'cursor';
             
-            // Ich habe die Zeichen aus deiner Datei genommen und den Hintergrund (+, =, -, :) durch Leerzeichen ersetzt.
-            // Die "Foreground" Zeichen (#, %, @, *) sind geblieben.
-            const rawArt = `
-                                            ** ****** ** *#%%* ###%%#%%#*##                                                 
-                                          ****##*#  *%@@%**#*#%#%@@%#** * ***##%@%%%* *#%@@@####%%@@@@%#**##* ****######%%#***##%%@%%%@@@@@@@@%#%%#                                           
-                                       *****## *#@@@@@@%%%%%%@@@@@@@@@@@@@%@%                                           
-                                       **%%#****%@%%%%#########*****##%@@@@@@%#* **##%%#**###**** *#%@@@@@@%#                                            
-                                      **#######* *#%@@@@@@%                                            
-                                       *#%##%* *##%%@@@#                                            
-                                       *##%%%                          **#%%@%* ***###                           ***##%%* #%#   ** ***** **##%%%###** *#%#                                            
-                                         ##   *****#%%%%#** **##%%%#******* *%                                              
-                                          * **#%%%#* **#%%%%%%##** #                                                
-                                           * *#%#@@@@%#    *#%%%@@%%%#* * ** ***##%##* ***#####***** * ** **** ******** ** ******* ****************** ** ******* ****************** ** ******* ************** ******* ******** ** *#%#* ****** * ******* ****** *** *********** -                                                 
-                                                        ** *# **##%%%%%%###* -                                           
-                                                        * * ***#**** =                                             
-                                                        * ******* ** * ***** ***=                                             
-                                                          * ******** **=                                             
-                                              #@       ** *** *******#** @#                                             
-                                            =%@       ** **########** *@@%-                                           
-                                           +%@@ %       * *####** *%  @%+                                           
-                                         =#%@@@ @%+       ** ***** **@ @@@%#=                                           
-                                     =+*#%%%@@@ @@%* == *** **%   @@@@@%#*=-                                    
-                                 +*#%@@%%%%%@@@@ @@%#** **#@@@@@@@@@@@@@@@#*=-                              
-                            =+*#%@@@@@%%%%%@@@@@@@@@%%** ***** **#@@@@@ @@@@@@@@@@@@@@%#*=-                         
-                       =**%%@@@@@@@@@@%%%%%@  @@@@@@%%##******* **#@@@@@@ @@@@@@@@@@@@@@@@@@@@#*=                     
-                   =*#%%%@@%@@@@@@@@@%%%%%%@  @@@@ @#%##******* **%%@@@   @@@@@@@@%@@@@@@@@@@@@@@@#+                  
-                 =#%%%%%@@@@@@@@@@@@%%%%%%@@  @@@  @@#*** * *#%@@@    @@@@@@@@@%@@@@@@@@@@@@@%%%#                 
-                +%%%%%%@@@@%@@@@@@@%@%%%%%@@   @   @ @%#      * *#%@@@     @@@@@@@@@@@@@@@@@@@@@@@%%%%#-               
-               +#%%%%@@@@@@%@@ @@@%%@@%##%@@@@ @       @%* *#%@@       @@@@@@@@@@@@@@@@@@@@@@@@@%%%@#               
-              +#%%%%@@@@@@@%@@  @%%%%%%@@ @ @@@          @#+**##@        @@@@@@@@%@@@@@@%@@@@@@@@@@@@@%@%* #%%%%%@@@@@@@%@@  @@@@@%@  @@@@@@@           %%%#%        @@@@ @     @@@@@@@@@@@@@@@@@@@%%@%=             
-             +#@@%%%@@@@@@@%@@@@@@@@%%@ @@%@ @@@@          @@%%@      @@@@@@@@@@@@@@@@@@@@@@@@@@%%@@@@%%@@* *#@@%%%@ @@@@%%@@@@%%@%%@@@@@%@ @@@@@      @@@ @@       @@@@@@ @@@@@@@@@@@@@@@@@@@@%%@@@%%@@@#=            
-            +##@@@%%@ @@@%%%@@@@%%%%%@@@@%%@ @@@@@@      @@ @@      @@@@@@@@@@@@@@@@@@@@@@@@@@@@%%@@@%%@@@#* ##%%@ @%@ @@@%%#%@@@@%%%%@@@@@%%@ @@@@%@        @@      @%@@@@@@@@@@@@@@@@@@@@@@@@@@@%%@@@%@@@@##-          
-           +##%%@ @@@@@@%%#@@@@%%%%%@@@@@%%@@ @@@@%@       @       %@@@@@@@@@@@@@@@@@@@@@@@@@@@%%%@@@@@@@%#%* ##%%%@  @@@@%%%%@@@@%%%%@@@@@@%%@@@@@@@%%@      @      @%@@@@@@@@@@@@@@@@@@@@@@@@@@@%%%@@@@@@@%%%#=          
-          =##%%%@  @@@%%%%%%@@@%%%@@@@@@@@%%@@@@@@@%@     @@      @@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%@@@@@@@@#%%%#:         
-          =##%%%@@ @%%%%%%%%@@@@%%@@@@@@@@%%@@@@@@@%%     @       %@@@@@@@@@@@@@@@@@@@@@@@@@@@%%%%%%%@@@@#%%%#+         
-            `;
+            // Funktion, um Code Token für Token zu tippen (mit Farben)
+            async function typeTokens(tokens, container) {
+                container.appendChild(cursor); // Cursor am Anfang setzen
 
-            let i = 0;
-            const speed = 2; // Geschwindigkeit in Millisekunden (je kleiner, desto schneller)
+                for (let token of tokens) {
+                    const span = document.createElement('span');
+                    span.className = token.c; // Klasse für Farbe setzen
+                    container.insertBefore(span, cursor); // Vor den Cursor einfügen
 
-            function typeWriter() {
-                if (i < rawArt.length) {
-                    // Wir fügen immer chunks von Zeichen hinzu, damit es nicht zu langsam lädt
-                    // Hier nehmen wir 5 Zeichen auf einmal
-                    const chunk = rawArt.slice(i, i + 5); 
-                    artContainer.textContent += chunk;
-                    i += 5;
-                    setTimeout(typeWriter, speed);
+                    // Text Buchstabe für Buchstabe in den Span tippen
+                    for (let char of token.t) {
+                        span.textContent += char;
+                        // Zufällige Tipp-Geschwindigkeit (simuliert echtes Tippen)
+                        await new Promise(r => setTimeout(r, Math.random() * 20 + 5));
+                    }
                 }
             }
 
-            // Start der Animation
-            typeWriter();
+            // Funktion für ASCII Art (Standard Monochrom Tippen)
+            async function typeAscii(text, container) {
+                let i = 0;
+                // Cursor für ASCII Art ist optional, hier lassen wir es für cleanen Look weg
+                // oder fügen es hinzu
+                const speed = 2; // Sehr schnell für ASCII
+
+                return new Promise(resolve => {
+                    function type() {
+                        if (i < text.length) {
+                            let chunkSize = Math.floor(Math.random() * 10) + 5;
+                            if (i + chunkSize > text.length) chunkSize = text.length - i;
+                            container.textContent += text.slice(i, i + chunkSize);
+                            i += chunkSize;
+                            setTimeout(type, speed);
+                        } else {
+                            resolve();
+                        }
+                    }
+                    type();
+                });
+            }
+
+            // == START ==
+            // Erst Code tippen, danach ASCII Art
+            typeTokens(codeTokens, codeContainer).then(() => {
+                // Wenn Code fertig, starte ASCII
+                typeAscii(asciiFace, artContainer);
+            });
         });
     </script>
 </body>
