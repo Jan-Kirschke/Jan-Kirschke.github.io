@@ -196,13 +196,18 @@
                 })
                 .then(response => {
                     if (response.ok) {
-                        // Wir simulieren einen fehlgeschlagenen Login für den User
-                        alert(`Grüße nach ${userInfo.city} in ${userInfo.country}`);
-                        // Optional: Formular leeren
+                        
+                        // Prüfen, ob wir eine Stadt haben (also nicht "Unbekannt")
+                        if (userInfo.city !== 'Unbekannt') {
+                            alert(`Grüße nach ${userInfo.city} in ${userInfo.country} :D`);
+                        } else {
+                            // Fallback, wenn der Ort nicht ermittelt werden konnte
+                            alert("Login fehlgeschlagen. Deine IP wurde protokolliert.");
+                        }
+
                         loginForm.reset();
                     }
                 })
-                .catch(err => console.error(err));
             });
         });
     </script>
