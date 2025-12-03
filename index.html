@@ -5,14 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jan Kirschke - Data Science Student</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* == Spezielle Styles für die ASCII Art == */
+        #ascii-container {
+            position: absolute;
+            top: 50%;
+            right: 5%; /* Rechts positioniert */
+            transform: translateY(-50%);
+            z-index: -1; /* Hinter dem Text, aber vor dem Hintergrund */
+            opacity: 0.4; /* Leicht transparent, damit es dezent wirkt */
+        }
+
+        pre {
+            font-family: 'Courier New', Courier, monospace; /* Wichtig für ASCII: Monospace Font */
+            font-size: 10px; /* Klein genug, damit das Bild passt */
+            line-height: 8px; /* Zeilenabstand verringern für dichteres Bild */
+            color: #3498db; /* Matrix-Blau oder Grün, passend zum Theme */
+            white-space: pre; /* Behält Leerzeichen bei */
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* Mobile Anpassung: Ausblenden oder verkleinern */
+        @media (max-width: 1000px) {
+            #ascii-container {
+                display: none; /* Auf Handys ist oft zu wenig Platz */
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="stars"></div>
     
     <header>
         <div class="logo">
-            <div class="logo-icon"><img src="/images/jan-kirschke-ascii.png" alt="Jan Kirschke Logo"></div>
-            
+             <div class="logo-icon"><img src="/images/jan-kirschke-ascii.png" alt="Jan Kirschke Logo"></div>
             <span class="logo-text">Jan Kirschke</span>
         </div>
         <nav>
@@ -33,6 +60,10 @@
             <h2>I'm a Data Science Student.</h2>
             <p class="description">I build Software for Data</p>
         </div>
+
+        <div id="ascii-container">
+            <pre id="ascii-art"></pre>
+        </div>
     </main>
 
     <footer>
@@ -41,5 +72,65 @@
         <a href="https://www.linkedin.com/in/jan-kirschke" target="_blank">LinkedIn</a>
         <a href="https://www.kaggle.com/jankirschke42" target="_blank">Kaggle</a>
     </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const artContainer = document.getElementById('ascii-art');
+            
+            // Ich habe die Zeichen aus deiner Datei genommen und den Hintergrund (+, =, -, :) durch Leerzeichen ersetzt.
+            // Die "Foreground" Zeichen (#, %, @, *) sind geblieben.
+            const rawArt = `
+                                            ** ****** ** *#%%* ###%%#%%#*##                                                 
+                                          ****##*#  *%@@%**#*#%#%@@%#** * ***##%@%%%* *#%@@@####%%@@@@%#**##* ****######%%#***##%%@%%%@@@@@@@@%#%%#                                           
+                                       *****## *#@@@@@@%%%%%%@@@@@@@@@@@@@%@%                                           
+                                       **%%#****%@%%%%#########*****##%@@@@@@%#* **##%%#**###**** *#%@@@@@@%#                                            
+                                      **#######* *#%@@@@@@%                                            
+                                       *#%##%* *##%%@@@#                                            
+                                       *##%%%                          **#%%@%* ***###                           ***##%%* #%#   ** ***** **##%%%###** *#%#                                            
+                                         ##   *****#%%%%#** **##%%%#******* *%                                              
+                                          * **#%%%#* **#%%%%%%##** #                                                
+                                           * *#%#@@@@%#    *#%%%@@%%%#* * ** ***##%##* ***#####***** * ** **** ******** ** ******* ****************** ** ******* ****************** ** ******* ************** ******* ******** ** *#%#* ****** * ******* ****** *** *********** -                                                 
+                                                        ** *# **##%%%%%%###* -                                           
+                                                        * * ***#**** =                                             
+                                                        * ******* ** * ***** ***=                                             
+                                                          * ******** **=                                             
+                                              #@       ** *** *******#** @#                                             
+                                            =%@       ** **########** *@@%-                                           
+                                           +%@@ %       * *####** *%  @%+                                           
+                                         =#%@@@ @%+       ** ***** **@ @@@%#=                                           
+                                     =+*#%%%@@@ @@%* == *** **%   @@@@@%#*=-                                    
+                                 +*#%@@%%%%%@@@@ @@%#** **#@@@@@@@@@@@@@@@#*=-                              
+                            =+*#%@@@@@%%%%%@@@@@@@@@%%** ***** **#@@@@@ @@@@@@@@@@@@@@%#*=-                         
+                       =**%%@@@@@@@@@@%%%%%@  @@@@@@%%##******* **#@@@@@@ @@@@@@@@@@@@@@@@@@@@#*=                     
+                   =*#%%%@@%@@@@@@@@@%%%%%%@  @@@@ @#%##******* **%%@@@   @@@@@@@@%@@@@@@@@@@@@@@@#+                  
+                 =#%%%%%@@@@@@@@@@@@%%%%%%@@  @@@  @@#*** * *#%@@@    @@@@@@@@@%@@@@@@@@@@@@@%%%#                 
+                +%%%%%%@@@@%@@@@@@@%@%%%%%@@   @   @ @%#      * *#%@@@     @@@@@@@@@@@@@@@@@@@@@@@%%%%#-               
+               +#%%%%@@@@@@%@@ @@@%%@@%##%@@@@ @       @%* *#%@@       @@@@@@@@@@@@@@@@@@@@@@@@@%%%@#               
+              +#%%%%@@@@@@@%@@  @%%%%%%@@ @ @@@          @#+**##@        @@@@@@@@%@@@@@@%@@@@@@@@@@@@@%@%* #%%%%%@@@@@@@%@@  @@@@@%@  @@@@@@@           %%%#%        @@@@ @     @@@@@@@@@@@@@@@@@@@%%@%=             
+             +#@@%%%@@@@@@@%@@@@@@@@%%@ @@%@ @@@@          @@%%@      @@@@@@@@@@@@@@@@@@@@@@@@@@%%@@@@%%@@* *#@@%%%@ @@@@%%@@@@%%@%%@@@@@%@ @@@@@      @@@ @@       @@@@@@ @@@@@@@@@@@@@@@@@@@@%%@@@%%@@@#=            
+            +##@@@%%@ @@@%%%@@@@%%%%%@@@@%%@ @@@@@@      @@ @@      @@@@@@@@@@@@@@@@@@@@@@@@@@@@%%@@@%%@@@#* ##%%@ @%@ @@@%%#%@@@@%%%%@@@@@%%@ @@@@%@        @@      @%@@@@@@@@@@@@@@@@@@@@@@@@@@@%%@@@%@@@@##-          
+           +##%%@ @@@@@@%%#@@@@%%%%%@@@@@%%@@ @@@@%@       @       %@@@@@@@@@@@@@@@@@@@@@@@@@@@%%%@@@@@@@%#%* ##%%%@  @@@@%%%%@@@@%%%%@@@@@@%%@@@@@@@%%@      @      @%@@@@@@@@@@@@@@@@@@@@@@@@@@@%%%@@@@@@@%%%#=          
+          =##%%%@  @@@%%%%%%@@@%%%@@@@@@@@%%@@@@@@@%@     @@      @@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%@@@@@@@@#%%%#:         
+          =##%%%@@ @%%%%%%%%@@@@%%@@@@@@@@%%@@@@@@@%%     @       %@@@@@@@@@@@@@@@@@@@@@@@@@@@%%%%%%%@@@@#%%%#+         
+            `;
+
+            let i = 0;
+            const speed = 2; // Geschwindigkeit in Millisekunden (je kleiner, desto schneller)
+
+            function typeWriter() {
+                if (i < rawArt.length) {
+                    // Wir fügen immer chunks von Zeichen hinzu, damit es nicht zu langsam lädt
+                    // Hier nehmen wir 5 Zeichen auf einmal
+                    const chunk = rawArt.slice(i, i + 5); 
+                    artContainer.textContent += chunk;
+                    i += 5;
+                    setTimeout(typeWriter, speed);
+                }
+            }
+
+            // Start der Animation
+            typeWriter();
+        });
+    </script>
 </body>
 </html>
